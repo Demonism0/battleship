@@ -98,3 +98,42 @@ test('Gameboard reports whether or not all of the ships have been sunk', () => {
   newBoard.receiveAttack([2, 4]);
   expect(newBoard.allSunk()).toBeTruthy();
 });
+
+test('Player factory function creates a player and computer gameboard', () => {
+  const newPlayer = battleship.Player();
+  expect(newPlayer).toHaveProperty('playerBoard');
+  expect(newPlayer).toHaveProperty('computerBoard');
+});
+
+test('Player and Computer have turns', () => {
+  const newPlayer = battleship.Player();
+  expect(newPlayer.checkTurn()).toBeTruthy();
+});
+
+test('Player can attack Computer when player turn', () => {
+  const newPlayer = battleship.Player();
+  const smallShip = newPlayer.computerBoard.tiles.row1.col3.getShip();
+  expect(newPlayer.computerBoard.tiles.row0.col0.checkAttack()).toBeFalsy();
+  newPlayer.attack([0, 0]);
+  expect(newPlayer.computerBoard.tiles.row0.col0.checkAttack()).toBeTruthy();
+  expect(smallShip.isSunk()).toBeFalsy();
+  newPlayer.attack([1, 3]);
+  newPlayer.attack([1, 4]);
+  expect(smallShip.isSunk()).toBeTruthy();
+  expect(newPlayer.computerBoard.allSunk()).toBeFalsy();
+  newPlayer.attack([1, 0]);
+  newPlayer.attack([2, 0]);
+  newPlayer.attack([3, 0]);
+  expect(newPlayer.computerBoard.allSunk()).toBeTruthy();
+});
+
+test('Computer attacks after player misses and it becomes player turn again', () => {
+  const newPlayer = battleship.Player();
+  expect(newPlayer.checkTurn()).toBeTruthy();
+  newPlayer.attack([1, 3]);
+  expect(newPlayer.checkTurn()).toBeTruthy();
+  newPlayer.attack([1, 4]);
+  expect(newPlayer.checkTurn()).toBeTruthy();
+  newPlayer.attack([2, 2]);
+  expect(newPlayer.checkTurn()).toBeTruthy();
+});

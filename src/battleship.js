@@ -79,9 +79,13 @@ function Gameboard() {
 
   const receiveAttack = (coords) => {
     const [row, col] = coords;
-    const shipHere = tiles[`row${row}`][`col${col}`].getShip();
-    if (shipHere) shipHere.hit();
     tiles[`row${row}`][`col${col}`].attackHere();
+    const shipHere = tiles[`row${row}`][`col${col}`].getShip();
+    if (shipHere) {
+      shipHere.hit();
+      return true;
+    }
+    return false;
   };
 
   const allSunk = () => {
@@ -96,4 +100,44 @@ function Gameboard() {
   };
 }
 
-export { Ship, Gameboard };
+const Player = () => {
+  const playerBoard = Gameboard();
+  const computerBoard = Gameboard();
+  // code to create ships on computerBoard
+  computerBoard.placeShip(4, [0, 0], 'v');
+  computerBoard.placeShip(2, [1, 3], 'h');
+
+  let isTurn = true;
+  const checkTurn = () => isTurn;
+  const changeTurn = () => {
+    isTurn = !isTurn;
+  };
+
+  const computerMove = () => {
+    const row = Math.floor(Math.random() * 8);
+    const col = Math.floor(Math.random() * 8);
+    const coords = [row, col];
+    if (playerBoard.tiles[`row${row}`][`col${col}`].checkAttack()) {
+      computerMove();
+    } else if (!playerBoard.receiveAttack(coords)) {
+      changeTurn();
+    } else {
+      computerMove();
+    }
+  };
+
+  const attack = (coords) => {
+    if (!computerBoard.receiveAttack(coords)) {
+      changeTurn();
+      computerMove();
+    }
+  };
+
+  return {
+    playerBoard, computerBoard, checkTurn, attack,
+  };
+};
+
+export {
+  Ship, Gameboard, Player,
+};
