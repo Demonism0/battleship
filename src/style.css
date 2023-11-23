@@ -1,0 +1,108 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+#header {
+  padding: 5px;
+  background-color: lightgray;
+  text-align: center;
+  font-size: 2rem;
+}
+#footer {
+  padding: 2px;
+  background-color: lightgray;
+  text-align: center;
+}
+#content {
+  margin: 10px;
+  flex-grow: 1;
+  align-content: stretch;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr 3fr 3fr 1fr;
+  grid-template-rows: 1fr 7fr;
+}
+.name.player {
+  grid-column: 1 / 3;
+}
+.name.computer {
+  grid-column: 3 / 5;
+}
+.name, .ships, .gameboard, .placeholder {
+  background-color: lightgray;
+  border-radius: 10px;
+}
+.name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gameboard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#playerboard, #computerboard {
+  aspect-ratio: 1 / 1;
+  width: 90%;
+  background-color: white;
+  box-shadow: 0 0 2px black;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+}
+.cell {
+  border: 1px solid black;
+}
+.highlight {
+  background-color: green;
+}
+.placed {
+  background-color: blue;
+}
+.hit {
+  background-color: red;
+}
+.miss {
+  background-color: gray;
+}
+.ships.left {
+  padding-top: 50px;
+  padding-left: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+.ships.left > div {
+  display: grid;
+  justify-content: start;
+  grid-auto-flow: column;
+}
+.modelship {
+  height: 25px;
+  width: 25px;
+  background-color: blue;
+  border: 1px solid black;
+}

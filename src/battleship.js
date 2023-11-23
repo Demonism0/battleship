@@ -1,3 +1,6 @@
+import Dom from './dom-interaction.js';
+import './style.css';
+
 function Ship(length) {
   let hits = 0;
   const hit = () => {
@@ -24,8 +27,14 @@ function Gameboard() {
       shipHere = newShip;
     };
 
+    let domCell;
+    const getDomCell = () => domCell;
+    const insertDomCell = (cellElement) => {
+      domCell = cellElement;
+    };
+
     return {
-      coords, checkAttack, attackHere, getShip, addShip,
+      coords, checkAttack, attackHere, getShip, addShip, getDomCell, insertDomCell,
     };
   }
   function generateCols(row) {
@@ -103,9 +112,17 @@ function Gameboard() {
 const Player = () => {
   const playerBoard = Gameboard();
   const computerBoard = Gameboard();
-  // code to create ships on computerBoard
-  computerBoard.placeShip(4, [0, 0], 'v');
-  computerBoard.placeShip(2, [1, 3], 'h');
+
+  computerBoard.placeShip(4, [3, 0]);
+  computerBoard.placeShip(3, [9, 4], 'h');
+  computerBoard.placeShip(3, [2, 9]);
+  computerBoard.placeShip(2, [4, 3]);
+  computerBoard.placeShip(2, [5, 7]);
+  computerBoard.placeShip(2, [7, 9]);
+  computerBoard.placeShip(1, [2, 2]);
+  computerBoard.placeShip(1, [3, 5]);
+  computerBoard.placeShip(1, [7, 4]);
+  computerBoard.placeShip(1, [0, 8]);
 
   let isTurn = true;
   const checkTurn = () => isTurn;
@@ -114,29 +131,90 @@ const Player = () => {
   };
 
   const computerMove = () => {
-    const row = Math.floor(Math.random() * 8);
-    const col = Math.floor(Math.random() * 8);
-    const coords = [row, col];
-    if (playerBoard.tiles[`row${row}`][`col${col}`].checkAttack()) {
-      computerMove();
-    } else if (!playerBoard.receiveAttack(coords)) {
-      changeTurn();
+    let row;
+    let col;
+    do {
+      row = Math.floor(Math.random() * 10);
+      col = Math.floor(Math.random() * 10);
+    } while (playerBoard.tiles[`row${row}`][`col${col}`].checkAttack());
+    const targetCell = playerBoard.tiles[`row${row}`][`col${col}`];
+    const attackSuccessful = playerBoard.receiveAttack([row, col]);
+    if (attackSuccessful) {
+      Dom.updateCell(targetCell);
+      if (playerBoard.allSunk()) {
+        Dom.announceWinner(false);
+      } else {
+        setTimeout(computerMove, 1000);
+      }
     } else {
-      computerMove();
+      Dom.updateCell(targetCell);
+      changeTurn();
     }
   };
 
   const attack = (coords) => {
-    if (!computerBoard.receiveAttack(coords)) {
+    const attackSuccessful = computerBoard.receiveAttack(coords);
+    const [row, col] = coords;
+    const targetCell = computerBoard.tiles[`row${row}`][`col${col}`];
+    if (attackSuccessful) {
+      Dom.updateCell(targetCell);
+      if (computerBoard.allSunk()) {
+        Dom.announceWinner(true);
+      }
+    } else {
+      Dom.updateCell(targetCell);
       changeTurn();
       computerMove();
     }
   };
 
+  let fourCount = 0;
+  let threeCount = 0;
+  let twoCount = 0;
+  let oneCount = 0;
+
+  const canBePlaced = (shipLength) => {
+    if (shipLength === 4 && fourCount < 1) {
+      fourCount += 1;
+      return true;
+    }
+    if (shipLength === 3 && threeCount < 2) {
+      threeCount += 1;
+      return true;
+    }
+    if (shipLength === 2 && twoCount < 3) {
+      twoCount += 1;
+      return true;
+    }
+    if (shipLength === 1 && oneCount < 4) {
+      oneCount += 1;
+      return true;
+    }
+    return false;
+  };
+
+  const allShipsPlaced = () => {
+    if (fourCount === 1 && threeCount === 2 && twoCount === 3 && oneCount === 4) {
+      return true;
+    }
+    return false;
+  };
+
   return {
-    playerBoard, computerBoard, checkTurn, attack,
+    playerBoard, computerBoard, checkTurn, attack, canBePlaced, allShipsPlaced,
   };
 };
+
+function gameloop() {
+  const newPlayer = Player();
+  Dom.createComputerBoard(newPlayer);
+  Dom.createPlayerBoard(newPlayer);
+}
+
+const playAgnBtn = document.querySelector('button');
+playAgnBtn.addEventListener('click', gameloop);
+
+gameloop();
 
 export {
   Ship, Gameboard, Player,

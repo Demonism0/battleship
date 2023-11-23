@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Battleship</title>
+  <link href="./style.css" rel="stylesheet" />
+</head>
+<body>
+  <script type="module" src="./battleship.js" defer></script>
+  <div id="header">Battleship</div>
+  <div id="content">
+    <div class="name player">Player</div>
+    <div class="name computer">Computer</div>
+    <div class="ships left">
+      <div class="four">
+        <div class="modelship"></div>
+        <div class="modelship"></div>
+        <div class="modelship"></div>
+        <div class="modelship"></div>
+      </div>
+      <div class="three">
+        <div class="modelship"></div>
+        <div class="modelship"></div>
+        <div class="modelship"></div>
+      </div>
+      <div class="three">
+        <div class="modelship"></div>
+        <div class="modelship"></div>
+        <div class="modelship"></div>
+      </div>
+      <div class="two">
+        <div class="modelship"></div>
+        <div class="modelship"></div>
+      </div>
+      <div class="two">
+        <div class="modelship"></div>
+        <div class="modelship"></div>
+      </div>
+      <div class="two">
+        <div class="modelship"></div>
+        <div class="modelship"></div>
+      </div>
+      <div class="one">
+        <div class="modelship"></div>
+      </div>
+      <div class="one">
+        <div class="modelship"></div>
+      </div>
+      <div class="one">
+        <div class="modelship"></div>
+      </div>
+      <div class="one">
+        <div class="modelship"></div>
+      </div>
+    </div>
+    <div class="gameboard left">
+      <div id="playerboard"></div>
+    </div>
+    <div class="gameboard right">
+      <div id="computerboard"></div>
+    </div>
+    <div class="placeholder"></div>
+  </div>
+  <div id="footer">Created by <a href="https://github.com/Demonism0/">Demonism0</a></div>
+  <dialog>
+    <div id="winner"></div>
+    <button>Play Again</button>
+  </dialog>
+</body>
+</html>
